@@ -46,7 +46,7 @@ def filter_to_reduce_vocabulary(string):
 
 
 # Cross entropy = 1.1835 on 1e3.
-def read(num_filenames=int(3e3)):
+def read(num_filenames=int(6e3)):
     buffer = ''
     for i, file in enumerate(get_filename()):
         filename = file.split('/')[-1]
