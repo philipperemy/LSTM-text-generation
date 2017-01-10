@@ -39,7 +39,6 @@ def generate_sentences(model, text, char_indices, indices_char):
             x = np.zeros((1, MAX_LEN, len(chars)))
             for t, char in enumerate(sentence):
                 x[0, t, char_indices[char]] = 1.
-
             predictions = model.predict(x, verbose=0)[0]
             next_index = int(sample(predictions, diversity))
             next_char = indices_char[next_index]

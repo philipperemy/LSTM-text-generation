@@ -44,7 +44,7 @@ def filter_to_reduce_vocabulary(string):
     return ''.join(output)
 
 
-def read(num_filenames=int(6e3), shuffle=True):
+def read(num_filenames=int(6e3), shuffle=True, debug=False):
     buffer = ''
     filename_list = sorted([v for v in get_filename()])
     if shuffle:
@@ -52,7 +52,8 @@ def read(num_filenames=int(6e3), shuffle=True):
     filename_list = filename_list[:num_filenames]
     for i, file in enumerate(filename_list):
         filename = file.split('/')[-1]
-        print(i, filename)
+        if debug:
+            print(i, filename)
         if '-' in filename:
             with open(file, 'r', encoding='utf-8', errors='ignore') as f:
                 new_lines = f.readlines()
@@ -61,10 +62,11 @@ def read(num_filenames=int(6e3), shuffle=True):
                     new_str = ''.join([v for v in new_lines[st:] if not v.startswith('--') and '@' not in v]).strip()
                     new_str = filter_unwanted_characters(new_str)
                     new_str = filter_to_reduce_vocabulary(new_str)
-                    print(new_str)
+                    if debug:
+                        print(new_str)
                     buffer += new_str
     return buffer
 
 
 if __name__ == '__main__':
-    read()
+    read(debug=True)
