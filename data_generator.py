@@ -1,4 +1,5 @@
 import os
+import random
 
 BASE_DIR = 'financial-news-dataset/'
 BLOOMBERG_DATA_DIR = os.path.join(BASE_DIR, '20061020_20131126_bloomberg_news')
@@ -49,13 +50,15 @@ def filter_to_reduce_vocabulary(string):
     return ''.join(output)
 
 
-def read(num_filenames=int(6e3)):
+def read(num_filenames=int(6e3), shuffle=False):
     buffer = ''
-    for i, file in enumerate(get_filename()):
+    filename_list = sorted([v for v in get_filename()])
+    if shuffle:
+        random.shuffle(filename_list)
+    filename_list = filename_list[:num_filenames]
+    for i, file in enumerate(filename_list):
         filename = file.split('/')[-1]
         print(i, filename)
-        if i > num_filenames:
-            break
         if '-' in filename:
             with open(file, 'r', encoding='utf-8', errors='ignore') as f:
                 new_lines = f.readlines()
