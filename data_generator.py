@@ -59,7 +59,8 @@ def read(num_filenames=int(6e3)):
         if '-' in filename:
             with open(file, 'r', encoding='utf-8', errors='ignore') as f:
                 new_lines = f.readlines()
-                new_str = ''.join([v for v in new_lines if not v.startswith('--') and '@' not in v]).strip()
+                st = max([t[0] for t in enumerate(new_lines) if t[1].startswith('--')]) + 1
+                new_str = ''.join([v for v in new_lines[st:] if not v.startswith('--') and '@' not in v]).strip()
                 new_str = filter_unwanted_characters(new_str)
                 if SHRINK_VOCABULARY_SIZE:
                     new_str = filter_to_reduce_vocabulary(new_str)
