@@ -19,20 +19,18 @@ def get_filename():
             yield os.path.join(root, file)
 
 
-def filter_unwanted_characters(string):
+def filter_unwanted_characters(s):
     unwanted_chars = ['\'\'', '``', '\n']
     for unwanted_char in unwanted_chars:
-        string = string.replace(unwanted_char, ' ')
-    while '  ' in string:
-        string = string.replace('  ', ' ')
-    string = string.replace(' ,', ',')
-    string = string.replace(';', ',')
-
+        s = s.replace(unwanted_char, ' ')
+    while '  ' in s:
+        s = s.replace('  ', ' ')
+    s = s.replace(' ,', ',')
+    s = s.replace(';', ',')
     end_tag = 'To contact the reporter'
-    if end_tag in string:
-        string = string[:string.index(end_tag)]
-        
-    return string
+    if end_tag in s:
+        s = s[:s.index(end_tag)]
+    return s
 
 
 def filter_to_reduce_vocabulary(string):
@@ -51,7 +49,6 @@ def filter_to_reduce_vocabulary(string):
     return ''.join(output)
 
 
-# Cross entropy = 1.1835 on 1e3.
 def read(num_filenames=int(6e3)):
     buffer = ''
     for i, file in enumerate(get_filename()):
