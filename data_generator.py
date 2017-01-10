@@ -22,17 +22,23 @@ def get_filename():
 def filter_unwanted_characters(string):
     unwanted_chars = ['\'\'', '``', '\n']
     for unwanted_char in unwanted_chars:
-        string = string.replace(unwanted_char, '')
+        string = string.replace(unwanted_char, ' ')
     while '  ' in string:
         string = string.replace('  ', ' ')
     string = string.replace(' ,', ',')
     string = string.replace(';', ',')
+
+    end_tag = 'To contact the reporter'
+    if end_tag in string:
+        string = string[:string.index(end_tag)]
+        
     return string
 
 
 def filter_to_reduce_vocabulary(string):
+    string = string.lower()
     output = []
-    valid_chars_except_alpha_numeric = [' ', ',', '.', '$', '%']
+    valid_chars_except_alpha_numeric = [' ', ',', '.', '$', '%', '\'', '-']
     valid_chars_alphabetical = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
                                 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     for c in string:
@@ -42,7 +48,7 @@ def filter_to_reduce_vocabulary(string):
             output.append(c)
         if c in valid_chars_except_alpha_numeric:
             output.append(c)
-    return ''.join(output).lower()
+    return ''.join(output)
 
 
 # Cross entropy = 1.1835 on 1e3.
@@ -58,10 +64,9 @@ def read(num_filenames=int(6e3)):
                 new_lines = f.readlines()
                 new_str = ''.join([v for v in new_lines if not v.startswith('--') and '@' not in v]).strip()
                 new_str = filter_unwanted_characters(new_str)
-
                 if SHRINK_VOCABULARY_SIZE:
                     new_str = filter_to_reduce_vocabulary(new_str)
-
+                print(new_str)
                 buffer += new_str
     print('data length =', len(buffer))
     return buffer
